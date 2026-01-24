@@ -7,23 +7,24 @@ function ContactPage() {
       <div className="absolute inset-0 bg-black/40 z-0"></div>
 
       {/* Content Container */}
-      <div className="relative z-10 min-h-screen flex items-center py-4 md:py-12">
+      <div className="relative z-10 min-h-screen flex items-start md:items-center py-8 md:py-12">
         <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
           
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10 lg:gap-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-10 lg:gap-12">
 
             {/* LEFT SIDE - Info */}
-            <div className="hidden md:block w-full md:w-[40%] lg:w-[35%] text-white text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-7xl font-bold leading-[1.1] mb-6 md:mb-8 font-[Merriweather]">
+            <div className="block w-full md:w-[40%] lg:w-[35%] text-white text-center md:text-left mb-6 md:mb-0">
+              <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-7xl font-bold leading-[1.1] mb-4 md:mb-8 font-[Merriweather]">
                 Let’s Stay <br className="hidden md:block" /> Connected
               </h1>
 
-              <p className="max-w-md text-base md:text-lg lg:text-lg xl:text-xl text-white/90 mb-8 md:mb-12 leading-relaxed mx-auto md:mx-0">
+              <p className="max-w-md text-base md:text-lg lg:text-lg xl:text-xl text-white/90 mb-6 md:mb-12 leading-relaxed mx-auto md:mx-0">
                 Whether you’re a farmer, a buyer, or simply curious, our team is
                 ready to connect with you
               </p>
 
-              <ul className="space-y-4 md:space-y-6 inline-block text-left">
+              {/* mobile view */}
+              <ul className="space-y-7 md:space-y-6 inline-block text-left">
                 {/* Email Item */}
                 <li className="flex items-center gap-4 text-sm md:text-base">
                   <span className="text-white w-6 flex justify-center">
@@ -52,7 +53,7 @@ function ContactPage() {
                       <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
                     </svg>
                   </span>
-                  <span>Address: 123 Agri Lane, Angeles City, Pampanga</span>
+                  <span>Address: 123 Agri Lane, Angeles City</span>
                 </li>
 
                 {/* Hours Item */}
