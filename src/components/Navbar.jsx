@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";  
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -6,14 +7,14 @@ function Navbar() {
     <nav className="bg-primary text-white p-4  font-family-body">
         <div className="flex items-center justify-between" >
             <div>
-              <img src="./public/Logo.svg" alt="Logo" className="h-10" />
+              <img src ="./public/Logo.svg" alt="Logo" className="h-10" />
             </div>
             
             <ul className=" hidden md:flex  flex-1 space-x-6 justify-center">
 
-              <li><a href="#home">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/marketplace">Marketplace</Link></li>
             </ul>
 
             <div className="hidden md:block">
@@ -35,10 +36,10 @@ function Navbar() {
               {isOpen && (
                   <div className="md:hidden mt-4 space-y-2">
                     <ul className="flex flex-col items-center space-y-2">
-                      <li><a href="#home">Home</a></li>
-                      <li><a href="#about">About</a></li>
-                      <li><a href="#contact">Contact</a></li>
-                      <li><a href="#login">Login</a></li>
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/about">About</Link></li>
+                      <li><Link to="/marketplace">Marketplace</Link></li>
+                      <li><Link to="#login">Login</Link></li>
                     </ul>
                   </div>
               )}
