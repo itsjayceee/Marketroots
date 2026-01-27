@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-primary: #2F5233;
+    --color-secondary: #AAD15D;
+    --font-family-heading: "Merriweather", serif;
+    --font-family-body: "Roboto", sans-serif;
+}
