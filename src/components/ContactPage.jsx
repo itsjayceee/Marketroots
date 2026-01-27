@@ -1,12 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function ContactPage() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let currentErrors = { ...errors };
+
+    if (name === 'phone') {
+      if (value && (!/^\d*$/.test(value) || value.length > 11)) {
+        return; 
+      }
+    }
+
+    if (name === 'email') {
+      const emailRegex = /\S+@\S+\.\S+/;
+      if (value.trim() === '') {
+        currentErrors.email = 'Email is required';
+      } else if (!emailRegex.test(value)) {
+        currentErrors.email = 'Please enter a valid email address';
+      } else {
+        delete currentErrors.email;
+      }
+    } else {
+      if (value.trim() !== '') {
+        delete currentErrors[name];
+      }
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    
+    setErrors(currentErrors);
+  };
+
+  const validateForm = () => {
+    let newErrors = {};
+    let isValid = true;
+
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First Name is required';
+      isValid = false;
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last Name is required';
+      isValid = false;
+    }
+
+    // Re-check email format on submit
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone Number is required';
+      isValid = false;
+    } else if (formData.phone.length !== 11) {
+      newErrors.phone = 'Phone number must be exactly 11 digits';
+      isValid = false;
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      console.log('Form Submitted Successfully:', formData);
+      alert('Message Sent!');
+      
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+      setErrors({});
+    } else {
+      console.log('Form has errors');
+    }
+  };
+
   return (
     <section className="relative w-full min-h-screen bg-[url('/contactpage_bg.png')] bg-cover bg-[position:70%_center] md:bg-center font-[Roboto]">
-      {/* Background Overlay */}
       <div className="absolute inset-0 bg-black/40 z-0"></div>
 
-      {/* Content Container */}
       <div className="relative z-10 min-h-screen flex items-start md:items-center py-8 md:py-12">
         <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-16 xl:px-24">
           
@@ -23,9 +125,7 @@ function ContactPage() {
                 ready to connect with you
               </p>
 
-              {/* mobile view */}
               <ul className="space-y-7 md:space-y-6 inline-block text-left">
-                {/* Email Item */}
                 <li className="flex items-center gap-4 text-sm md:text-base">
                   <span className="text-white w-6 flex justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -36,7 +136,6 @@ function ContactPage() {
                   <span>Email: hello@yourplatform.com</span>
                 </li>
 
-                {/* Phone Item */}
                 <li className="flex items-center gap-4 text-sm md:text-base">
                   <span className="text-white w-6 flex justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -46,7 +145,6 @@ function ContactPage() {
                   <span>Phone: +63 912 345 6789</span>
                 </li>
 
-                {/* Address Item */}
                 <li className="flex items-center gap-4 text-sm md:text-base">
                   <span className="text-white w-6 flex justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -56,7 +154,6 @@ function ContactPage() {
                   <span>Address: 123 Agri Lane, Angeles City</span>
                 </li>
 
-                {/* Hours Item */}
                 <li className="flex items-center gap-4 text-sm md:text-base">
                   <span className="text-white w-6 flex justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -78,15 +175,83 @@ function ContactPage() {
                   You can reach us anytime
                 </p>
 
-                <form className="space-y-3 md:space-y-4 lg:space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4 lg:space-y-5">
                   <div className="flex flex-col lg:flex-row gap-3 md:gap-4">
-                    <input type="text" placeholder="First Name" className="w-full lg:flex-1 px-5 py-3 md:py-4 rounded-full border border-black/20 bg-transparent text-black placeholder:text-black/40 outline-none focus:border-[#2F5233] transition-all text-sm md:text-base" />
-                    <input type="text" placeholder="Last Name" className="w-full lg:flex-1 px-5 py-3 md:py-4 rounded-full border border-black/20 bg-transparent text-black placeholder:text-black/40 outline-none focus:border-[#2F5233] transition-all text-sm md:text-base" />
+                    <div className="w-full lg:flex-1">
+                      <input 
+                        type="text" 
+                        name="firstName"
+                        placeholder="First Name" 
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        className={`w-full px-5 py-3 md:py-4 rounded-full border bg-transparent text-black placeholder:text-black/40 outline-none transition-all text-sm md:text-base ${
+                          errors.firstName ? 'border-red-500 focus:border-red-600' : 'border-black/20 focus:border-[#2F5233]'
+                        }`} 
+                      />
+                      {errors.firstName && <p className="text-red-500 text-xs ml-4 mt-1">{errors.firstName}</p>}
+                    </div>
+
+                    <div className="w-full lg:flex-1">
+                      <input 
+                        type="text" 
+                        name="lastName"
+                        placeholder="Last Name" 
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        className={`w-full px-5 py-3 md:py-4 rounded-full border bg-transparent text-black placeholder:text-black/40 outline-none transition-all text-sm md:text-base ${
+                          errors.lastName ? 'border-red-500 focus:border-red-600' : 'border-black/20 focus:border-[#2F5233]'
+                        }`} 
+                      />
+                      {errors.lastName && <p className="text-red-500 text-xs ml-4 mt-1">{errors.lastName}</p>}
+                    </div>
                   </div>
-                  <input type="email" placeholder="Email" className="w-full px-5 py-3 md:py-4 rounded-full border border-black/20 bg-transparent text-black placeholder:text-black/40 outline-none focus:border-[#2F5233] transition-all text-sm md:text-base" />
-                  <input type="text" placeholder="Phone Number" className="w-full px-5 py-3 md:py-4 rounded-full border border-black/20 bg-transparent text-black placeholder:text-black/40 outline-none focus:border-[#2F5233] transition-all text-sm md:text-base" />
-                  <textarea placeholder="How can we help?" rows="4" className="w-full px-5 py-3 md:py-4 rounded-[20px] md:rounded-[25px] border border-black/20 bg-transparent text-black placeholder:text-black/40 outline-none focus:border-[#2F5233] transition-all resize-none text-sm md:text-base"></textarea>
-                  <button type="submit" className="w-full mt-1 md:mt-4 py-3 md:py-4 rounded-full bg-[#2F5233] hover:bg-[#233d26] text-white font-semibold text-base md:text-lg shadow-lg transition-transform active:scale-95">
+
+                  <div>
+                    <input 
+                      type="email" 
+                      name="email"
+                      placeholder="Juan@gmail.com" 
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`w-full px-5 py-3 md:py-4 rounded-full border bg-transparent text-black placeholder:text-black/40 outline-none transition-all text-sm md:text-base ${
+                        errors.email ? 'border-red-500 focus:border-red-600' : 'border-black/20 focus:border-[#2F5233]'
+                      }`} 
+                    />
+                    {errors.email && <p className="text-red-500 text-xs ml-4 mt-1">{errors.email}</p>}
+                  </div>
+
+                  <div>
+                    <input 
+                      type="text" 
+                      name="phone"
+                      placeholder="e.g 0912-345-6789" 
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`w-full px-5 py-3 md:py-4 rounded-full border bg-transparent text-black placeholder:text-black/40 outline-none transition-all text-sm md:text-base ${
+                        errors.phone ? 'border-red-500 focus:border-red-600' : 'border-black/20 focus:border-[#2F5233]'
+                      }`} 
+                    />
+                    {errors.phone && <p className="text-red-500 text-xs ml-4 mt-1">{errors.phone}</p>}
+                  </div>
+
+                  <div>
+                    <textarea 
+                      name="message"
+                      placeholder="How can we help?" 
+                      rows="4" 
+                      value={formData.message}
+                      onChange={handleChange}
+                      className={`w-full px-5 py-3 md:py-4 rounded-[20px] md:rounded-[25px] border bg-transparent text-black placeholder:text-black/40 outline-none transition-all resize-none text-sm md:text-base ${
+                        errors.message ? 'border-red-500 focus:border-red-600' : 'border-black/20 focus:border-[#2F5233]'
+                      }`}
+                    ></textarea>
+                    {errors.message && <p className="text-red-500 text-xs ml-4 mt-1">{errors.message}</p>}
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full mt-1 md:mt-4 py-3 md:py-4 rounded-full bg-[#2F5233] hover:bg-[#233d26] text-white font-semibold text-base md:text-lg shadow-lg transition-transform active:scale-95"
+                  >
                     Submit
                   </button>
                 </form>
